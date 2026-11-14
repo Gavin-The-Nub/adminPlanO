@@ -1,0 +1,679 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   PlanO Design Tokens — Brand System (§4)
+   Source of truth: brand sheet. All colors reconciled 2026-07-05.
+   See DESIGN_DECISIONS.md for rationale on each token change.
+   ========================================================================== */
+
+:root {
+  /* --- Color tokens (§4.1) --- */
+  /* Primary green — brand sheet ground truth, was #1A7A4A */
+  --color-primary: #1D9E75;
+  --color-primary-light: #E6F7F0;
+  --color-primary-dark: #178A64;
+
+  /* Secondary orange — warm accents, HOT/WARM heat badges */
+  --color-secondary: #EF9F27;
+  --color-secondary-light: #FEF3E0;
+
+  /* Informational blue — links, info states */
+  --color-info: #378ADD;
+  --color-info-light: #E0EEFA;
+
+  /* Destructive red — delete, danger zone, validation errors */
+  --color-error: #D83030;
+  --color-error-light: #FDE8E8;
+
+  /* Neutrals — reconciled with brand sheet */
+  --color-accent: #F7F5F0;       /* paper / base background */
+  --color-surface: #FFFFFF;       /* card / elevated surface */
+  --color-text: #1A1915;          /* ink / primary text */
+  /* Darkened from #6B7280 → #5A5F6B for WCAG AA on paper bg (~5.2:1), see §4.1 */
+  --color-text-muted: #5A5F6B;
+  --color-border: #E5E7EB;
+
+  /* --- Typography scale (§4.2) — didn't exist before, audit §7 --- */
+  --font-size-display-lg: 2.75rem;
+  --line-height-display-lg: 1.1;
+  --font-size-display-md: 2rem;
+  --line-height-display-md: 1.15;
+  --font-size-display-sm: 1.5rem;
+  --line-height-display-sm: 1.2;
+  --font-size-body-lg: 1.125rem;
+  --line-height-body-lg: 1.5;
+  --font-size-body-md: 1rem;
+  --line-height-body-md: 1.5;
+  --font-size-body-sm: 0.875rem;
+  --line-height-body-sm: 1.4;
+  --font-size-caption: 0.75rem;
+  --line-height-caption: 1.3;
+  --font-size-mono-md: 0.875rem;
+  --line-height-mono-md: 1.4;
+
+  /* --- Spacing scale (§4.4) — replaces ad-hoc p-4/p-5/p-6/p-8 --- */
+  --space-xs: 0.5rem;    /* 8px  — tight groupings (icon+label) */
+  --space-sm: 0.75rem;   /* 12px — form field internal padding */
+  --space-md: 1rem;      /* 16px — default gaps */
+  --space-lg: 1.5rem;    /* 24px — card padding */
+  --space-xl: 2rem;      /* 32px — section spacing */
+  --space-2xl: 3rem;     /* 48px — page-level spacing */
+
+  /* --- Radius tokens (§4.4) — replaces mixed rounded-lg/xl/2xl/full --- */
+  --radius-control: 0.625rem;  /* 10px — buttons, inputs, selects */
+  --radius-card: 1rem;         /* 16px — cards, modals */
+  --radius-badge: 0.375rem;    /* 6px  — small tags/badges (non-pill) */
+  --radius-pill: 9999px;       /* status pills, heat badges */
+
+  /* --- Shadow tokens (§4.4) — replaces ad-hoc shadow-sm/lg/xl --- */
+  --shadow-card: 0 1px 2px rgba(26,25,21,0.04), 0 2px 8px rgba(26,25,21,0.06);
+  --shadow-card-hover: 0 2px 4px rgba(26,25,21,0.06), 0 8px 24px rgba(26,25,21,0.10);
+  --shadow-modal: 0 8px 16px rgba(26,25,21,0.08), 0 24px 48px rgba(26,25,21,0.16);
+
+  /* --- Transition token (§4.4, §9) --- */
+  --transition-base: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ==========================================================================
+   Tailwind v4 Theme Mapping
+   ========================================================================== */
+
+@theme inline {
+  /* Colors */
+  --color-primary: var(--color-primary);
+  --color-primary-light: var(--color-primary-light);
+  --color-primary-dark: var(--color-primary-dark);
+  --color-secondary: var(--color-secondary);
+  --color-secondary-light: var(--color-secondary-light);
+  --color-info: var(--color-info);
+  --color-info-light: var(--color-info-light);
+  --color-accent: var(--color-accent);
+  --color-surface: var(--color-surface);
+  --color-text: var(--color-text);
+  --color-text-muted: var(--color-text-muted);
+  --color-error: var(--color-error);
+  --color-error-light: var(--color-error-light);
+  --color-warning: var(--color-secondary);
+  --color-border: var(--color-border);
+
+  /* Fonts */
+  --font-display: var(--font-fraunces);
+  --font-body: var(--font-inter);
+  --font-mono: var(--font-dm-mono);
+}
+
+/* ==========================================================================
+   Global Base Styles
+   ========================================================================== */
+
+body {
+  background: var(--color-accent);
+  color: var(--color-text);
+  font-family: var(--font-body), 'DM Sans', sans-serif;
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   Typography Utilities
+   Named scale classes for use across all pages (§4.2)
+   ========================================================================== */
+
+.font-display {
+  font-family: var(--font-display), 'Instrument Serif', serif;
+}
+
+.font-body {
+  font-family: var(--font-body), 'DM Sans', sans-serif;
+}
+
+.text-display-lg {
+  font-size: var(--font-size-display-lg);
+  line-height: var(--line-height-display-lg);
+  font-family: var(--font-display), 'Instrument Serif', serif;
+}
+
+.text-display-md {
+  font-size: var(--font-size-display-md);
+  line-height: var(--line-height-display-md);
+  font-family: var(--font-display), 'Instrument Serif', serif;
+}
+
+.text-display-sm {
+  font-size: var(--font-size-display-sm);
+  line-height: var(--line-height-display-sm);
+  font-family: var(--font-display), 'Instrument Serif', serif;
+}
+
+.text-body-lg {
+  font-size: var(--font-size-body-lg);
+  line-height: var(--line-height-body-lg);
+}
+
+.text-body-md {
+  font-size: var(--font-size-body-md);
+  line-height: var(--line-height-body-md);
+}
+
+.text-body-sm {
+  font-size: var(--font-size-body-sm);
+  line-height: var(--line-height-body-sm);
+}
+
+.text-caption {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+.text-mono-md {
+  font-size: var(--font-size-mono-md);
+  line-height: var(--line-height-mono-md);
+  font-family: var(--font-mono), monospace;
+}
+
+/* ==========================================================================
+   Status Pill Colors (§5 Badge component)
+   Uses brand tokens instead of hardcoded hex
+   ========================================================================== */
+
+.status-new {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.status-quoted {
+  background-color: var(--color-info-light);
+  color: var(--color-info);
+}
+
+/* --radius-card not -xl: standardizing all card corners, see DESIGN_DECISIONS.md */
+.status-booked {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.status-completed {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary-dark);
+}
+
+.status-declined {
+  background-color: var(--color-error-light);
+  color: var(--color-error);
+}
+
+.status-cancelled {
+  background-color: #F3F4F6;
+  color: var(--color-text-muted);
+}
+
+.status-archived {
+  background-color: #F3F4F6;
+  color: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Scoped Transitions (§4.4, §9)
+   Audit §7: global * transition caused layout thrashing.
+   Now scoped to interactive elements only.
+   ========================================================================== */
+
+button,
+a,
+input,
+select,
+textarea,
+[role="button"],
+.card-hover,
+.skeleton {
+  transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+  transition-duration: var(--transition-base);
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   Focus Styles — preserved from original, works well (§8)
+   ========================================================================== */
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus-visible,
+[role="button"]:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   Skip-to-content Link (§8 accessibility)
+   First focusable element, visually hidden until focused
+   ========================================================================== */
+
+.skip-to-content {
+  position: absolute;
+  left: -9999px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+.skip-to-content:focus {
+  position: fixed;
+  top: var(--space-md);
+  left: var(--space-md);
+  width: auto;
+  height: auto;
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-primary);
+  color: white;
+  font-size: var(--font-size-body-sm);
+  font-weight: 600;
+  border-radius: var(--radius-control);
+  box-shadow: var(--shadow-modal);
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   Scrollbar
+   ========================================================================== */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Animation Keyframes
+   ========================================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse-subtle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.3s ease-out forwards;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.3s ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+/* ==========================================================================
+   Skeleton Loading Shimmer
+   Uses brand-tinted colors instead of raw grays (§5 Skeleton)
+   ========================================================================== */
+
+@keyframes shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #EDEBE6 25%, var(--color-accent) 37%, #EDEBE6 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: var(--radius-control);
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Smooth content reveal after skeleton */
+@keyframes contentReveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.skeleton-loaded {
+  animation: contentReveal 0.2s ease-out forwards;
+}
+
+/* ==========================================================================
+   Card Elevation Utilities
+   Uses token-based radius and shadow (§4.4)
+   ========================================================================== */
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.card-hover {
+  transition: box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.card-hover:hover {
+  box-shadow: var(--shadow-card-hover);
+  border-color: color-mix(in srgb, var(--color-border) 60%, var(--color-primary) 40%);
+}
+
+.inquiry-card {
+  transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+}
+.inquiry-card:hover {
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Custom Scrollbar (narrow variant)
+   ========================================================================== */
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Stagger Animation Delays
+   Use with animate-fade-in for sequential card/element reveals
+   ========================================================================== */
+
+.stagger-1 { animation-delay: 75ms; }
+.stagger-2 { animation-delay: 150ms; }
+.stagger-3 { animation-delay: 225ms; }
+.stagger-4 { animation-delay: 300ms; }
+.stagger-5 { animation-delay: 375ms; }
+.stagger-6 { animation-delay: 450ms; }
+
+/* Elements using stagger should start invisible until animation runs */
+.stagger-1, .stagger-2, .stagger-3,
+.stagger-4, .stagger-5, .stagger-6 {
+  opacity: 0;
+}
+
+/* ==========================================================================
+   Gradient Text Utility
+   For hero headline accent keyword
+   ========================================================================== */
+
+.text-gradient-primary {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ==========================================================================
+   Stat Card Gradient Tints
+   Subtle brand-colored background gradients for dashboard metrics
+   ========================================================================== */
+
+.stat-gradient-inquiries {
+  background: linear-gradient(135deg, var(--color-info-light) 0%, var(--color-surface) 100%);
+}
+.stat-gradient-quoted {
+  background: linear-gradient(135deg, var(--color-info-light) 0%, var(--color-surface) 100%);
+}
+.stat-gradient-booked {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-surface) 100%);
+}
+.stat-gradient-conversion {
+  background: linear-gradient(135deg, var(--color-primary-light) 0%, var(--color-surface) 100%);
+}
+
+/* ==========================================================================
+   Hero Decorative Orbs
+   Blurred radial gradient background elements for landing page
+   ========================================================================== */
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.hero-orb-1 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-primary) 8%, transparent) 0%, transparent 70%);
+  top: -100px;
+  right: -100px;
+}
+
+.hero-orb-2 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-secondary) 6%, transparent) 0%, transparent 70%);
+  bottom: -80px;
+  left: -60px;
+}
+
+.hero-orb-3 {
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, color-mix(in srgb, var(--color-info) 5%, transparent) 0%, transparent 70%);
+  top: 40%;
+  left: 60%;
+}
+
+/* ==========================================================================
+   Heat Score Left Border Utilities
+   3px left border shortcuts for inquiry row urgency indication
+   ========================================================================== */
+
+.heat-border-hot {
+  border-left: 3px solid var(--color-error);
+}
+.heat-border-warm {
+  border-left: 3px solid var(--color-secondary);
+}
+.heat-border-cold {
+  border-left: 3px solid var(--color-info);
+}
+.heat-border-none {
+  border-left: 3px solid var(--color-border);
+}
+
+/* ==========================================================================
+   Status Left Border Utilities
+   Colored left borders for event/inquiry cards by pipeline status
+   ========================================================================== */
+
+.status-border-new {
+  border-left: 3px solid var(--color-primary);
+}
+.status-border-quoted {
+  border-left: 3px solid var(--color-info);
+}
+.status-border-booked {
+  border-left: 3px solid var(--color-primary-dark);
+}
+.status-border-completed {
+  border-left: 3px solid var(--color-primary-dark);
+}
+.status-border-declined {
+  border-left: 3px solid var(--color-error);
+}
+.status-border-cancelled {
+  border-left: 3px solid var(--color-text-muted);
+}
+.status-border-archived {
+  border-left: 3px solid var(--color-text-muted);
+}
+
+/* ==========================================================================
+   Form Progress Bar
+   Slim inline progress indicator for multi-field forms
+   ========================================================================== */
+
+.progress-bar-track {
+  height: 4px;
+  background: var(--color-border);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-dark));
+  border-radius: var(--radius-pill);
+  transition: width 300ms ease;
+}
+
+/* ==========================================================================
+   Section Header (Form Sections)
+   Icon + label pattern for form grouping
+   ========================================================================== */
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: var(--space-md);
+}
+
+.section-header-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-control);
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ==========================================================================
+   Pipeline Funnel Bar
+   Proportional colored segments for status distribution
+   ========================================================================== */
+
+.funnel-bar {
+  display: flex;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  background: var(--color-border);
+}
+
+.funnel-segment {
+  height: 100%;
+  transition: width 300ms ease;
+}
+
+/* ==========================================================================
+   Funnel Arrow Connector (Analytics)
+   Downward arrow between funnel stages
+   ========================================================================== */
+
+.funnel-arrow {
+  display: flex;
+  justify-content: center;
+  padding: 2px 0;
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   Global Checkbox Accent (§8.4)
+   Ensures all checkboxes use brand green across the site.
+   ========================================================================== */
+
+input[type="checkbox"] {
+  accent-color: var(--color-primary);
+}
